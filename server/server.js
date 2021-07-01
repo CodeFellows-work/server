@@ -21,6 +21,11 @@ chat.on('connection', (socket) => {
     server.emit('send', message);
   });
 
+  socket.on('disconnect', (id) => {
+    console.log('EVENT:disconnect', id);
+    server.emit('disconnect', id + 'has left the chatroom');
+  });
+
 });
 
 clientIo.connect('http://localhost:3000/chat');// frontend
