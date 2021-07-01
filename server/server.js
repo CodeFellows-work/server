@@ -2,20 +2,28 @@
 
 
 const io = require('socket.io');
-const clientIo = require('socket.io-client');
+const clientIo = require('socket.io-client');//frontend
 const server = io(3000);
 
 const chat = server.of('/chat');
 
 chat.on('connection', (socket) => {
+  socket.emit('connections',)
   console.log('socket is connected', socket.id);
+
+  socket.on('joined', (id) => {
+    console.log('EVENT:joined', id);
+    server.emit('joined', id + 'has joined the chatroom');
+  });
+
   socket.on('send', (message) => {
     console.log('EVENT:Send', message);
     server.emit('send', message);
   });
+
 });
 
-clientIo.connect('http://localhost:3000/chat');
+clientIo.connect('http://localhost:3000/chat');// frontend
 
 // server.listen(3000, () => {
 //   console.log(`listening on *:${3000}`);
