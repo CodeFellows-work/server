@@ -1,22 +1,25 @@
 'use strict';
 
-const io = require('socket.io');
 
+const io = require('socket.io');
+const clientIo = require('socket.io-client');
 const server = io(3000);
 
 const chat = server.of('/chat');
 
 chat.on('connection', (socket) => {
-  console.log('socket it connected', + socket.id);
+  console.log('socket is connected', socket.id);
   socket.on('send', (message) => {
     console.log('EVENT:Send', message);
     server.emit('send', message);
   });
 });
 
-server.listen(3000, () => {
-  console.log(`listening on *:${3000}`);
-});
+clientIo.connect('http://localhost:3000/chat');
+
+// server.listen(3000, () => {
+//   console.log(`listening on *:${3000}`);
+// });
 
 // var app = require('express')();
 // var http = require('http').createServer(app);
