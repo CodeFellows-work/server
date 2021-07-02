@@ -3,7 +3,7 @@
 
 const {Server} = require('socket.io');
 // const clientIo = require('socket.io-client');//frontend
-const server = new Server('https://serverlab.herokuapp.com', {cors:{origin:['http://localhost:3001'], methods:['GET']}});
+const server = new Server(3000, {cors:{origin:['http://localhost:3001'], methods:['GET']}});
 
 const chat = server.of('/chat');
 
