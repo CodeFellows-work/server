@@ -1,34 +1,34 @@
 'use strict';
 
 
-const io = require('socket.io');
-const clientIo = require('socket.io-client');//frontend
-const server = io(3000);
+const {Server} = require('socket.io');
+// const clientIo = require('socket.io-client');//frontend
+const server = new Server(3000, {cors:{origin:['http://localhost:3001'], methods:['GET']}});
 
 const chat = server.of('/chat');
 
 chat.on('connection', (socket) => {
-  socket.emit('connections',)
+  socket.emit('connections');
   console.log('socket is connected', socket.id);
 
-  socket.on('joined', (id) => {
-    console.log('EVENT:joined', id);
-    server.emit('joined', id + 'has joined the chatroom');
+  socket.on('joinRoom', (data) => {
+    console.log('EVENT:joined', data);
+    chat.emit('joinedRoom', data.username + 'has joined the chatroom');
   });
 
-  socket.on('send', (message) => {
-    console.log('EVENT:Send', message);
-    server.emit('send', message);
+  socket.on('chat', (message) => {
+    console.log('EVENT:chat', message);
+    chat.emit('chat', message);
   });
 
   socket.on('disconnect', (id) => {
     console.log('EVENT:disconnect', id);
-    server.emit('disconnect', id + 'has left the chatroom');
+    chat.emit('Test', id + 'has left the chatroom');
   });
 
 });
 
-clientIo.connect('http://localhost:3000/chat');// frontend
+// clientIo.connect('http://localhost:3000/chat');// frontend
 
 // server.listen(3000, () => {
 //   console.log(`listening on *:${3000}`);
